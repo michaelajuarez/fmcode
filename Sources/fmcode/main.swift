@@ -1,16 +1,17 @@
+import Foundation
 import FoundationModels
 
 let model = SystemLanguageModel.default
 
-switch model.availability {
-  case .available:
-    print("Model is available.")
-  case .unavailable(.deviceNotEligible):
-    print("This device doesn't support Apple Intelligence.")
-  case .unavailable(.appleIntelligenceNotEnabled):
-    print("Apple Intelligence is not enabled.")
-  case .unavailable(.modelNotReady):
-    print("Model assets are still downloading.")
-  case .unavailable(let other):
-    print("Model Unavailable: \(other)")
+guard case .available = model.availability else {
+  print("Model isn't available: \(model.availability)")
+  exit(1)
 }
+
+let session = LanguageModelSession(
+  instructions: "You are a terse, helpful coding assistant. Ask follow up questions if necessary."
+)
+
+let response = try await session.respond(to: "Say hello in one sentence.")
+print(response.content)
+
