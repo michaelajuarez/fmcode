@@ -30,7 +30,6 @@ struct ReadFileTool: Tool {
 
   func call(arguments: Arguments) async throws -> String {
     let url = URL(fileURLWithPath: arguments.path)
-    // let items = try FileManager.default.contents(atPath: url.path)
     let retVar = try String(contentsOf: url, encoding: .utf8)
     return retVar
   }
@@ -44,12 +43,13 @@ struct WriteFileTool: Tool {
   struct Arguments {
     @Guide(description: "File path to write to, relative to the current working directory.")
     var path: String
+    @Guide(description: "Text to write to the file, follow the directions given.")
+    var textToWrite: String
   }
 
-  func call(arguments: Arguments) async throws -> String{
+  func call(arguments: Arguments) async throws -> String {
     let url = URL(fileURLWithPath: arguments.path)
-    let handle = try FileHandle.init(forReadingFrom: url)
-    print(handle)
-    return ""
+    try arguments.textToWrite.write(to: url, atomically: true, encoding: .utf8)
+    return arguments.textToWrite
   }
 }

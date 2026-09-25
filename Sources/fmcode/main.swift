@@ -19,5 +19,8 @@ print(response.content)
 response = try await session.respond(to: "Read the python file.")
 print(response.content)
 
-response = try await session.respond(to: "Write to the previously found file, make FizzBuzz.")
+response = try await session.respond(to: "Write FizzBizz in C in a new file please!")
+print(response.content)
+
+response = try await session.respond(to: "Read the newly created file.")
 print(response.content)
