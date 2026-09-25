@@ -9,7 +9,10 @@ let package = Package(
     targets: [
         .executableTarget(
             name: "fmcode",
-            path: "Sources/fmcode"
+            path: "Sources/fmcode",
+            exclude: [
+                "test.py"
+            ]
         )
     ]
 )

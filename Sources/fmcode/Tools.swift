@@ -35,3 +35,21 @@ struct ReadFileTool: Tool {
     return retVar
   }
 }
+
+struct WriteFileTool: Tool {
+  let name = "write_file"
+  let description = "Writes to a given file."
+
+  @Generable
+  struct Arguments {
+    @Guide(description: "File path to write to, relative to the current working directory.")
+    var path: String
+  }
+
+  func call(arguments: Arguments) async throws -> String{
+    let url = URL(fileURLWithPath: arguments.path)
+    let handle = try FileHandle.init(forReadingFrom: url)
+    print(handle)
+    return ""
+  }
+}
