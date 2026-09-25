@@ -9,9 +9,13 @@ guard case .available = model.availability else {
 }
 
 let session = LanguageModelSession(
+  tools: [ListDirectoryTool(), ReadFileTool()],
   instructions: "You are a terse, helpful coding assistant. Ask follow up questions if necessary."
 )
 
-let response = try await session.respond(to: "Say hello in one sentence.")
+var response = try await session.respond(to: "What files are currently in the directory?")
+print(response.content)
+
+response = try await session.respond(to: "Read the main file.")
 print(response.content)
 
