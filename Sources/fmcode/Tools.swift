@@ -1,6 +1,26 @@
 import Foundation
 import FoundationModels
 
+struct CheckType: Tool {
+  let name = "check_type"
+  let description = "Check the type of a given path, either a file or a directory."
+
+  @Generable
+  struct Arguments {
+    @Guide(description: "Path to file/directory, undetermined.")
+    var path: String
+  }
+
+  func call(arguments: Arguments) async throws -> String {
+    let url = URL(fileURLWithPath: arguments.path)
+    let vals = try url.resourceValues(forKeys: [.isDirectoryKey])
+    if (vals.isDirectory == true) {
+      return "directory"
+    }
+    return "file"
+  }
+}
+
 struct ListDirectoryTool: Tool {
   let name = "list_directory"
   let description = "List files and directories at any given path."
