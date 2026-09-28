@@ -32,9 +32,30 @@ struct ListDirectoryTool: Tool {
   }
 
   func call(arguments: Arguments) async throws -> String {
+    // var retVal = ""
     let url = URL(fileURLWithPath: arguments.path)
     let items = try FileManager.default.contentsOfDirectory(atPath: url.path).sorted()
-    return items.joined(separator: "\n")
+    // for item in items { // Imperative Style
+    //   let full = url.appendingPathComponent(item)
+    //   let vals = try? full.resourceValues(forKeys: [.isDirectoryKey])
+    //   if (vals?.isDirectory == true) {
+    //     retVal += item
+    //     retVal += "/\n"
+    //   } else {
+    //     retVal += item
+    //     retVal += "\n"
+    //   }
+    // }
+    let lines = items.map {item -> String in
+      let full = url.appendingPathComponent(item)
+      let vals = try? full.resourceValues(forKeys: [.isDirectoryKey])
+      if (vals?.isDirectory == true) {
+        return item + "/"
+      } else {
+        return item
+      }
+    }
+    return lines.joined(separator: "\n")
   }
 }
 
