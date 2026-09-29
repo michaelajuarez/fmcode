@@ -112,6 +112,9 @@ struct EditFileTool: Tool {
   }
 
   func call(arguments: Arguments) async throws -> String {
+    if (arguments.oldText.isEmpty) {
+      return "oldText must not be empty"
+    }
     let url = URL(fileURLWithPath: arguments.path)
     let contents = try String(contentsOf: url, encoding: .utf8)
     let count = contents.ranges(of: arguments.oldText).count

@@ -12,9 +12,6 @@ let package = Package(
             name: "fmcode",
             dependencies: ["core"],
             path: "Sources/fmcode",
-            exclude: [
-                "test.py"
-            ]
         )
     ]
 )
