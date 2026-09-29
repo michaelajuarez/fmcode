@@ -35,20 +35,14 @@ struct ListDirectoryTool: Tool {
   }
 
   func call(arguments: Arguments) async throws -> String {
-    // var retVal = ""
     let url = URL(fileURLWithPath: arguments.path)
+    if !FileManager.default.fileExists(atPath: arguments.path) {
+      return "Directory does not exist."
+    }
+    if !isDirectory(url) {
+      return "Path points to a file, not a directory."
+    }
     let items = try FileManager.default.contentsOfDirectory(atPath: url.path).sorted()
-    // for item in items { // Imperative Style
-    //   let full = url.appendingPathComponent(item)
-    //   let vals = try? full.resourceValues(forKeys: [.isDirectoryKey])
-    //   if (vals?.isDirectory == true) {
-    //     retVal += item
-    //     retVal += "/\n"
-    //   } else {
-    //     retVal += item
-    //     retVal += "\n"
-    //   }
-    // }
     let lines = items.map {item -> String in
       let full = url.appendingPathComponent(item)
       if (isDirectory(full)) {
@@ -73,6 +67,12 @@ struct ReadFileTool: Tool {
 
   func call(arguments: Arguments) async throws -> String {
     let url = URL(fileURLWithPath: arguments.path)
+    if !FileManager.default.fileExists(atPath: arguments.path) {
+      return "File does not exist: \(arguments.path)"
+    }
+    if isDirectory(url) {
+      return "Path points to a directory, not a file."
+    }
     let retVar = try String(contentsOf: url, encoding: .utf8)
     return retVar
   }
@@ -116,6 +116,12 @@ struct EditFileTool: Tool {
       return "oldText must not be empty"
     }
     let url = URL(fileURLWithPath: arguments.path)
+    if !FileManager.default.fileExists(atPath: arguments.path) {
+      return "File does not exist: \(arguments.path)"
+    }
+    if isDirectory(url) {
+      return "Path points to a directory, not a file."
+    }
     let contents = try String(contentsOf: url, encoding: .utf8)
     let count = contents.ranges(of: arguments.oldText).count
     if (count >= 2) {
