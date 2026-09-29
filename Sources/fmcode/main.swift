@@ -9,8 +9,8 @@ guard case .available = model.availability else {
 }
 
 let session = LanguageModelSession(
-  tools: [ListDirectoryTool(), ReadFileTool(), WriteFileTool(), EditFileTool()],
-  instructions: "You are a terse, helpful coding assistant. Ask follow up questions if necessary."
+  tools: [ListDirectoryTool(), ReadFileTool(), WriteFileTool(), CheckType(), EditFileTool()],
+  instructions: "You are a terse coding assistant working in the user's current directory. Use your tools to look before you answer: list a directory before guessing what's in it, and read a file before describing or editing it. Never invent file contents. Prefer edit_file for small changes and write_file only for new files or full rewrites. After making a change, say briefly what you changed."
 )
 
 var response = try await session.respond(to: "What files are currently in the directory?")
