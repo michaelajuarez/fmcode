@@ -1,61 +1,47 @@
-# Project Name
+# FM Code
 
-This is a Apple Foundations Model CLI, that replicates the functionality of Claude Code.
-
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-blue)
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Getting Started](#getting-started)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+A CLI wrapper around Apple's on-device Foundation Models, built to bring Claude Code-style tool use to a fully local model on MacOS.
 
 ## Overview
 
-This allows the user to use their local Apple Foundations Model present on their Mac to do some light code editing. It's not as capable as a larger model, but this CLI allows for the user to create, edit, and write to files based on natural language input.
+FM Code runs entirely on-device using Apple's Foundation Models framework. There's no internet connection required, and no data leaves the machine. The model can read, list, and edit files in a project directory based on natural language input in a REPL, choosing which tool to call on its own rather than following a fixed command syntax.
+
+It's smaller and less capable than a hosted model like Claude or ChatGPT, so this isn't trying to replace something like Claude Code or Codex. It's an alternative meant for smaller, local tasks where you don't want to call back to a model provider.
 
 ## Features
 
-- Creating new files
-- Edit existing files
-- No internet connection required, running off the Apple Foundations Model present on MacOS
+- REPL interface for interactive sessions
+- Model-driven tool selection: the model decides when to list a directory, read a file, or edit one, based on what you ask for
+- File tools: list directory contents, read files, edit files, create and write new files
+- Graceful failure handling: a failed tool call (bad path, missing file) returns an error to the model and the session continues instead of crashing
 
 ## Getting Started
 
 ### Prerequisites
 
-- MacOS 27.0 Golden Gate
+- macOS 26.0 (Tahoe) or later
 - Apple Intelligence-capable device
 
 ### Installation
 
 ```bash
-# Clone the repository
 git clone https://github.com/michaelajuarez/fmcode
 cd fmcode
-
-# Install dependencies
 swift build
 ```
 
 ## Usage
 
 ```bash
-# Run the project
 swift run
 ```
 
-Example:
+Example session:
 
-```bash
-> Write FizzBuzz to a new file
+```
+> list the files in this directory
+> read Package.swift
+> change beta to BETA in scratch.txt
 ```
 
 ## Project Structure
@@ -68,32 +54,18 @@ Example:
 │   │   └── helper.swift    # Shared helper utilities
 │   └── fmcode/
 │       ├── main.swift       # CLI entry point / REPL
-│       └── Tools.swift      # Model tools (file create/edit, etc.)
+│       └── Tools.swift      # Model tools (list, read, edit, write)
 └── README.md
 ```
 
-## Testing
+## Roadmap
 
-```bash
-swift run
-```
-
-## Contributing
-
-Contributions are welcome.
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/my-feature`)
-3. Commit your changes (`git commit -m "Add my feature"`)
-4. Push to the branch (`git push origin feature/my-feature`)
-5. Open a pull request
-
-## License
-
-Distributed under the MIT License. See `LICENSE` for details.
+- Command execution (`run_command`) with approval prompts before writes, edits, and shell commands
+- Live tool-activity display during a session
+- One-shot mode (`fmcode "prompt"`) for non-interactive use
+- Release build and PATH installation
+- Make a more pleasant UI/UX
 
 ## Contact
 
-Your Name - [@michaelajuarez](https://github.com/michaelajuarez) - michael@juarezfamily.com
-
-Project link: https://github.com/michaelajuarez/fmcode
+Michael Juarez - [@michaelajuarez](https://github.com/michaelajuarez)
