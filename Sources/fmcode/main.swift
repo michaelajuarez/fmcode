@@ -9,7 +9,7 @@ guard case .available = model.availability else {
 }
 
 let session = LanguageModelSession(
-  tools: [ListDirectoryTool(), ReadFileTool(), WriteFileTool()],
+  tools: [ListDirectoryTool(), ReadFileTool(), WriteFileTool(), EditFileTool()],
   instructions: "You are a terse, helpful coding assistant. Ask follow up questions if necessary."
 )
 

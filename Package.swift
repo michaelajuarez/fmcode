@@ -7,8 +7,10 @@ let package = Package(
         .macOS(.v26)
     ],
     targets: [
+        .target(name: "core", path: "Sources/core"),
         .executableTarget(
             name: "fmcode",
+            dependencies: ["core"],
             path: "Sources/fmcode",
             exclude: [
                 "test.py"

@@ -1,13 +1,6 @@
 import Foundation
 import FoundationModels
-
-func isDirectory(_ url: URL) -> Bool {
-  let resVals = try? url.resourceValues(forKeys: [.isDirectoryKey])
-  if (resVals?.isDirectory == true) {
-    return true
-  }
-  return false
-}
+import core
 
 struct CheckType: Tool {
   let name = "check_type"
@@ -20,6 +13,9 @@ struct CheckType: Tool {
   }
 
   func call(arguments: Arguments) async throws -> String {
+    if (!FileManager.default.fileExists(atPath: arguments.path)) {
+      return "does_not_exist"
+    }
     let url = URL(fileURLWithPath: arguments.path)
     if (isDirectory(url)) {
       return "directory"
@@ -90,6 +86,27 @@ struct WriteFileTool: Tool {
   struct Arguments {
     @Guide(description: "File path to write to, relative to the current working directory.")
     var path: String
+    @Guide(description: "Text to write to the file, follow the directions given.")
+    var textToWrite: String
+  }
+
+  func call(arguments: Arguments) async throws -> String {
+    let url = URL(fileURLWithPath: arguments.path)
+    try arguments.textToWrite.write(to: url, atomically: true, encoding: .utf8)
+    return arguments.textToWrite
+  }
+}
+
+struct EditFileTool: Tool {
+  let name = "edit_file"
+  let description = "Edits a currently existing file."
+
+  @Generable
+  struct Arguments {
+    @Guide(description: "File path to edit, relative to the current working directory.")
+    var path: String
+    @Guide(description: "Old text from file, from the current file path.")
+    var oldText: String
     @Guide(description: "Text to write to the file, follow the directions given.")
     var textToWrite: String
   }
