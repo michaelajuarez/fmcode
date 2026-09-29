@@ -68,4 +68,4 @@ Example session:
 
 ## Contact
 
-Michael Juarez - [@michaelajuarez](https://github.com/michaelajuarez)
+Michael Juarez - [@michaelajuarez](https://github.com/michaelajuarez) - michael@juarezfamily.com
