@@ -1,6 +1,14 @@
 import Foundation
 import FoundationModels
 
+func isDirectory(_ url: URL) -> Bool {
+  let resVals = try? url.resourceValues(forKeys: [.isDirectoryKey])
+  if (resVals?.isDirectory == true) {
+    return true
+  }
+  return false
+}
+
 struct CheckType: Tool {
   let name = "check_type"
   let description = "Check the type of a given path, either a file or a directory."
@@ -13,8 +21,7 @@ struct CheckType: Tool {
 
   func call(arguments: Arguments) async throws -> String {
     let url = URL(fileURLWithPath: arguments.path)
-    let vals = try url.resourceValues(forKeys: [.isDirectoryKey])
-    if (vals.isDirectory == true) {
+    if (isDirectory(url)) {
       return "directory"
     }
     return "file"
@@ -48,8 +55,7 @@ struct ListDirectoryTool: Tool {
     // }
     let lines = items.map {item -> String in
       let full = url.appendingPathComponent(item)
-      let vals = try? full.resourceValues(forKeys: [.isDirectoryKey])
-      if (vals?.isDirectory == true) {
+      if (isDirectory(full)) {
         return item + "/"
       } else {
         return item
